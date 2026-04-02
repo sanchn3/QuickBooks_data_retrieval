@@ -1,0 +1,7 @@
+# Build-only dependencies — needed on the DEV machine to produce QB_Weekly_Sync.exe.
+# Not required on the target machine.
+#
+# Install:
+#   C:\Python311_32\python.exe -m pip install -r requirements-build.txt
+
+pyinstaller>=6.0.0

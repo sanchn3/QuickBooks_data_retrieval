@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-16"?>
+<!--
+  scheduler_task.xml — Windows Task Scheduler definition for QB_Weekly_Sync.
+
+  Import via:
+    schtasks /create /xml scheduler_task.xml /tn "QB_Weekly_Sync"
+  or via the Task Scheduler GUI: Action → Import Task...
+
+  IMPORTANT: Update <Command> and <WorkingDirectory> below to match
+             the folder where QB_Weekly_Sync.exe and .env are deployed.
+-->
+<Task version="1.4" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
+  <RegistrationInfo>
+    <Description>Weekly QuickBooks to Supabase data sync. Runs every Monday at 2:00 AM CST.</Description>
+    <Author>QB Data Transfer</Author>
+  </RegistrationInfo>
+
+  <Triggers>
+    <CalendarTrigger>
+      <StartBoundary>2026-04-06T02:00:00</StartBoundary>
+      <!-- Run even if the scheduled time was missed (e.g. machine was off) -->
+      <ExecutionTimeLimit>PT1H</ExecutionTimeLimit>
+      <Enabled>true</Enabled>
+      <ScheduleByWeek>
+        <WeeksInterval>1</WeeksInterval>
+        <DaysOfWeek>
+          <Monday />
+        </DaysOfWeek>
+      </ScheduleByWeek>
+    </CalendarTrigger>
+  </Triggers>
+
+  <Principals>
+    <Principal id="Author">
+      <!-- Run as the currently logged-on user (required for QuickBooks Desktop) -->
+      <LogonType>InteractiveToken</LogonType>
+      <RunLevel>LeastPrivilege</RunLevel>
+    </Principal>
+  </Principals>
+
+  <Settings>
+    <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>
+    <DisallowStartIfOnBatteries>false</DisallowStartIfOnBatteries>
+    <StopIfGoingOnBatteries>false</StopIfGoingOnBatteries>
+    <AllowHardTerminate>true</AllowHardTerminate>
+    <StartWhenAvailable>true</StartWhenAvailable>
+    <RunOnlyIfNetworkAvailable>true</RunOnlyIfNetworkAvailable>
+    <IdleSettings>
+      <StopOnIdleEnd>false</StopOnIdleEnd>
+      <RestartOnIdle>false</RestartOnIdle>
+    </IdleSettings>
+    <AllowStartOnDemand>true</AllowStartOnDemand>
+    <Enabled>true</Enabled>
+    <Hidden>false</Hidden>
+    <RunOnlyIfIdle>false</RunOnlyIfIdle>
+    <WakeToRun>false</WakeToRun>
+    <ExecutionTimeLimit>PT1H</ExecutionTimeLimit>
+    <Priority>7</Priority>
+  </Settings>
+
+  <Actions Context="Author">
+    <Exec>
+      <!--
+        UPDATE THESE PATHS if you deploy to a different folder.
+        No Python required — QB_Weekly_Sync.exe is self-contained.
+        WorkingDirectory must match the folder containing .env.
+      -->
+      <Command>C:\QB_Weekly_Sync\QB_Weekly_Sync.exe</Command>
+      <WorkingDirectory>C:\QB_Weekly_Sync\</WorkingDirectory>
+    </Exec>
+  </Actions>
+</Task>

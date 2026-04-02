@@ -1,0 +1,4 @@
+pywin32>=306          # QBXMLRP2 COM bridge — MUST use 32-bit Python 3.11
+supabase>=2.3.0,<2.23.0  # Supabase Python client (capped: 2.23+ pulls in pyiceberg which requires MSVC)
+python-dotenv>=1.0.0  # .env loading
+lxml>=5.0.0           # Fast XML parsing for QBXML responses

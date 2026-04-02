@@ -1,0 +1,7 @@
+# Development / testing dependencies — not needed at runtime or for building the exe.
+#
+# Install:
+#   venv\Scripts\pip install -r requirements-dev.txt
+
+pytest>=8.0.0
+pytest-timeout>=2.0.0
